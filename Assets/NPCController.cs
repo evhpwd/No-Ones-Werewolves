@@ -15,8 +15,10 @@ public class NPCController: MonoBehaviour
     {
         jobs = new Queue<IJob>();
         var nameCanvas = transform.Find("NameCanvas");
+        transform.position = new Vector3(transform.position.x, transform.position.y, 1);
         nameCanvas.GetComponent<Canvas>().pixelPerfect = true;
         nameCanvas.GetComponent<Text>().text = PawnName;
+        name = "Pawn (" + PawnName + ")";
     }
 
     void Update()
