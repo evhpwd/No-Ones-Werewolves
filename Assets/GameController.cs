@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
 
     public Sprite treeSprite;
 
+    NPCController selectedPawn;
+
     void Start()
     {
         foreach (string name in names)
@@ -36,6 +38,31 @@ public class GameController : MonoBehaviour
             tree.name = "Tree";
             var sprite = tree.AddComponent<SpriteRenderer>();
             sprite.sprite = treeSprite;
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            NPCController pawn;
+            if (hit.collider != null && (pawn = hit.collider.gameObject.GetComponent<NPCController>()))
+            {
+                if (selectedPawn != null)
+                {
+                    selectedPawn.HideOutline();
+                }
+                selectedPawn = pawn;
+                selectedPawn.ShowOutline();
+            } else
+            {
+                if (selectedPawn != null)
+                {
+                    selectedPawn.HideOutline();
+                }
+                selectedPawn = null;
+            }
         }
     }
 }

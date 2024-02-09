@@ -10,15 +10,16 @@ public class NPCController: MonoBehaviour
 
     Queue<IJob> jobs;
     IJob current_job;
+    GameObject outline;
 
     void Start()
     {
         jobs = new Queue<IJob>();
         var nameCanvas = transform.Find("NameCanvas");
-        transform.position = new Vector3(transform.position.x, transform.position.y, 1);
         nameCanvas.GetComponent<Canvas>().pixelPerfect = true;
         nameCanvas.GetComponent<Text>().text = PawnName;
         name = "Pawn (" + PawnName + ")";
+        outline = transform.Find("Outline").gameObject;
     }
 
     void Update()
@@ -28,6 +29,16 @@ public class NPCController: MonoBehaviour
             current_job = new Walking(this, dest);
         }
         current_job.Tick();
+    }
+
+    public void ShowOutline()
+    {
+        outline.SetActive(true);
+    }
+
+    public void HideOutline()
+    {
+        outline.SetActive(false);
     }
 }
 
