@@ -19,7 +19,7 @@ public class NPCController: MonoBehaviour
         nameCanvas.GetComponent<Canvas>().pixelPerfect = true;
         nameCanvas.GetComponent<Text>().text = PawnName;
         name = "Pawn (" + PawnName + ")";
-        outline = transform.Find("Outline").gameObject;
+        outline = transform.Find("Sprite/Outline").gameObject;
     }
 
     void Update()

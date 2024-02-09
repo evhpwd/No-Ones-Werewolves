@@ -46,23 +46,24 @@ public class GameController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            NPCController pawn;
-            if (hit.collider != null && (pawn = hit.collider.gameObject.GetComponent<NPCController>()))
-            {
-                if (selectedPawn != null)
-                {
-                    selectedPawn.HideOutline();
-                }
-                selectedPawn = pawn;
-                selectedPawn.ShowOutline();
-            } else
-            {
-                if (selectedPawn != null)
-                {
-                    selectedPawn.HideOutline();
-                }
-                selectedPawn = null;
+            NPCController pawn = null;
+            if (hit.collider != null) {
+                pawn = hit.collider.gameObject.GetComponent<NPCController>();
             }
+            ChangeSelectedPawn(pawn);
+        }
+    }
+
+    void ChangeSelectedPawn(NPCController newPawn)
+    {
+        if (selectedPawn != null)
+        {
+            selectedPawn.HideOutline();
+        }
+        selectedPawn = newPawn;
+        if (selectedPawn != null)
+        {
+            selectedPawn.ShowOutline();
         }
     }
 }
