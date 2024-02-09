@@ -10,6 +10,9 @@ public class NPCController: MonoBehaviour
 
     Queue<IJob> jobs;
     IJob current_job;
+    [SerializeField]
+    Material outlineMaterial;
+
     GameObject outline;
 
     void Start()
@@ -20,6 +23,18 @@ public class NPCController: MonoBehaviour
         nameCanvas.GetComponent<Text>().text = PawnName;
         name = "Pawn (" + PawnName + ")";
         outline = transform.Find("Sprite/Outline").gameObject;
+        Vector2[] offsets = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        Sprite mySprite = transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite;
+        foreach (Vector2 off in offsets)
+        { 
+            var obj = new GameObject();
+            obj.transform.parent = outline.transform;
+            obj.transform.position = new Vector3(off.x / 10, off.y / 10, 11);
+            var render = obj.AddComponent<SpriteRenderer>();
+            render.material = outlineMaterial;
+            render.sprite = mySprite;
+        }
+        outline.SetActive(false);
     }
 
     void Update()
