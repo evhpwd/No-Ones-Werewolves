@@ -39,11 +39,33 @@ public class NPCController: MonoBehaviour
 
     void Update()
     {
-        if ((current_job is null || current_job.Done()) && !jobs.TryDequeue(out current_job)) {
-            Vector3 dest = transform.position + (Vector3)Random.insideUnitCircle * 5;
-            current_job = new Walking(this, dest);
+        if (current_job is null || current_job.Done())
+        {
+            NextJob();
         }
         current_job.Tick();
+    }
+
+    // Dequeues the next job into `current_job`.
+    // If there are no queued jobs:
+    //   - If the last job was `Idle`, add a `Walk` job
+    //   - Otherwise, add an `Idle` job
+    // There will always be a `current_job` at the end of this
+    void NextJob()
+    {
+        if (jobs.Count > 0)
+        {
+            current_job = jobs.Dequeue();
+        }
+        else if (current_job is Idle)
+        {
+            Vector3 dest = transform.position + (Vector3)Random.insideUnitCircle * 7.5f;
+            current_job = new Walking(this, dest);
+        }
+        else
+        {
+            current_job = new Idle(Random.Range(1.5f, 2.5f));
+        }
     }
 
     public void ShowOutline()
@@ -59,22 +81,19 @@ public class NPCController: MonoBehaviour
 
 interface IJob
 {
+    // Return a value between 0 and 1 representing the progress on this task
     float Progress();
     bool Done();
+    // Do whatever work is required for the task this frame
     void Tick();
     static string Description;
-    NPCController Pawn
-    {
-        get;
-        set;
-    }
 }
 
 class Walking : IJob
 {
-    Vector3 startPos;
-    Vector3 endPos;
-    public NPCController Pawn
+    readonly Vector3 startPos;
+    readonly Vector3 endPos;
+    NPCController Pawn
     {
         get;
         set;
@@ -102,5 +121,34 @@ class Walking : IJob
         Pawn = pawn;
         startPos = pawn.transform.position;
         endPos = destination;
+    }
+}
+
+class Idle : IJob
+{
+    readonly float startTime;
+    readonly float endTime;
+    float IJob.Progress()
+    {
+        var totalLength = endTime - startTime;
+        var elapsed = Time.time - startTime;
+        if (elapsed > 0)
+        {
+            return totalLength / elapsed;
+        } else
+        {
+            return 0;
+        }
+    }
+    bool IJob.Done()
+    {
+        return Time.time >= endTime;
+    }
+    void IJob.Tick() { }
+
+    public Idle(float time)
+    {
+        startTime = Time.time;
+        endTime = startTime + time;
     }
 }
