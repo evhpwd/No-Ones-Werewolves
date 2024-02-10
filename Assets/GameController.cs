@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
@@ -73,19 +73,14 @@ public class GameController : MonoBehaviour
         {
             Camera.main.transform.Translate(movement / 2);
         }
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float amnt = Mathf.Abs(scroll) * 2.5f;
+        if (scroll > 0 && Camera.main.orthographicSize > 10)
         {
-            if (Camera.main.orthographicSize > 10)
-            {
-                Camera.main.orthographicSize--;
-           }
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            Camera.main.orthographicSize -= amnt;
+        } else if (scroll < 0 && Camera.main.orthographicSize < 30)
         {
-            if (Camera.main.orthographicSize < 30)
-            {
-                Camera.main.orthographicSize++;
-            }
+            Camera.main.orthographicSize += amnt;
         }
 
     }
