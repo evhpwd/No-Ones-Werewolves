@@ -31,13 +31,12 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < 10; i++)
         {
-            GameObject tree = new GameObject();
+            GameObject tree = new();
             var treePos = (Vector3)Random.insideUnitCircle * 10;
             treePos.z = 0;
             tree.transform.position = treePos;
             tree.name = "Tree";
-            var sprite = tree.AddComponent<SpriteRenderer>();
-            sprite.sprite = treeSprite;
+            tree.AddComponent<SpriteRenderer>().sprite = treeSprite;
         }
         Camera.main.orthographicSize = 10;
     }
@@ -75,7 +74,7 @@ public class GameController : MonoBehaviour
         }
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         float amnt = Mathf.Abs(scroll) * 2.5f;
-        if (scroll > 0 && Camera.main.orthographicSize > 10)
+        if (scroll > 0 && Camera.main.orthographicSize > 5)
         {
             Camera.main.orthographicSize -= amnt;
         } else if (scroll < 0 && Camera.main.orthographicSize < 30)
