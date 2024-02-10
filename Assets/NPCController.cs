@@ -77,9 +77,23 @@ public class NPCController: MonoBehaviour
     {
         outline.SetActive(false);
     }
+
+
+    // Assign a job to this pawn, overriding the current job
+    // TODO: job cancel system?
+    public void SetJob(IJob job)
+    {
+        current_job = job;
+    }
+
+    // Queue a job for this pawn at the end of the job queue
+    public void QueueJob(IJob job)
+    {
+        jobs.Enqueue(job);
+    }
 }
 
-interface IJob
+public interface IJob
 {
     // Return a value between 0 and 1 representing the progress on this task
     float Progress();
@@ -89,7 +103,7 @@ interface IJob
     static string Description;
 }
 
-class Walking : IJob
+public class Walking : IJob
 {
     readonly Vector3 startPos;
     readonly Vector3 endPos;
@@ -124,7 +138,7 @@ class Walking : IJob
     }
 }
 
-class Idle : IJob
+public class Idle : IJob
 {
     readonly float startTime;
     readonly float endTime;

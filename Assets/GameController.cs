@@ -51,6 +51,11 @@ public class GameController : MonoBehaviour
                 pawn = hit.collider.gameObject.GetComponent<NPCController>();
             }
             ChangeSelectedPawn(pawn);
+        } else if (Input.GetMouseButtonDown(1) && selectedPawn is not null)
+        {
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            selectedPawn.SetJob(new Walking(selectedPawn, pos));
+            ChangeSelectedPawn(null);
         }
     }
 
