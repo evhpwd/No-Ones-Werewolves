@@ -47,15 +47,30 @@ public class GameController : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             NPCController pawn = null;
-            if (hit.collider != null) {
+            if (hit.collider != null)
+            {
                 pawn = hit.collider.gameObject.GetComponent<NPCController>();
             }
             ChangeSelectedPawn(pawn);
-        } else if (Input.GetMouseButtonDown(1) && selectedPawn is not null)
+        }
+        else if (Input.GetMouseButtonDown(1) && selectedPawn is not null)
         {
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             selectedPawn.SetJob(new Walking(selectedPawn, pos));
             ChangeSelectedPawn(null);
+        }
+
+        CameraMovement();
+    }
+
+    void CameraMovement()
+    {
+        Vector2 movement = Vector2.zero;
+        movement.x += Input.GetAxis("Horizontal");
+        movement.y += Input.GetAxis("Vertical");
+        if (movement.magnitude != 0)
+        {
+            Camera.main.transform.Translate(movement / 2);
         }
     }
 
