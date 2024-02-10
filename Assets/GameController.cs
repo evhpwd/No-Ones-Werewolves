@@ -39,6 +39,7 @@ public class GameController : MonoBehaviour
             var sprite = tree.AddComponent<SpriteRenderer>();
             sprite.sprite = treeSprite;
         }
+        Camera.main.orthographicSize = 10;
     }
 
     void Update()
@@ -72,6 +73,21 @@ public class GameController : MonoBehaviour
         {
             Camera.main.transform.Translate(movement / 2);
         }
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            if (Camera.main.orthographicSize > 10)
+            {
+                Camera.main.orthographicSize--;
+           }
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            if (Camera.main.orthographicSize < 30)
+            {
+                Camera.main.orthographicSize++;
+            }
+        }
+
     }
 
     void ChangeSelectedPawn(NPCController newPawn)
